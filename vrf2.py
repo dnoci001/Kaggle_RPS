@@ -12,18 +12,18 @@ def warmup_strategy():
     action = int(np.random.randint(3))
     return int(action)
 
-def init_train():
+def init_train(step):
     global data,train,nfeatures
     train = np.array(data[:nfeatures]).reshape(1,-1)
-    for i in range(2,nfeatures):
+    for i in range(1,step-nfeatures):
         train = np.concatenate((train,data[i:i+nfeatures].reshape(1,-1)))
 
-def build_train():
+def build_train(step):
     global data,train,test,moves,nfeatures
-
-    train = np.concatenate((train,data[-nfeatures-1:-2].reshape(1,-1)))
+    i = step-nfeatures - 1
+    train = np.concatenate((train,data[i:i+nfeatures].reshape(1,-1)))
          
-    moves = np.array(data[nfeatures:)
+    moves = np.array(data[nfeatures:step])
     test = np.array(data[-1*nfeatures:]).reshape(1,-1)
        
 def predict(step):
@@ -43,7 +43,7 @@ def predict(step):
         if not c in proba:
             proba[c] = 0.0 
         else:
-            proba[c] = proba[c]-0.165
+            proba[c] = proba[c]-0.2 
 
     ## populate an array of votes from which we will randomly choose from
     votes = np.empty(0)
@@ -69,10 +69,10 @@ def predict(step):
     return action
 
 def agent(observation, configuration):
-    global data,,nfeatures,mylastaction
+    global data,votestrain,nvotes,nfeatures,forest,guess,correct
     ndiscard = 20 ## assume that the first ndiscard actions are garbage/random actions that might polute our model
     nwarmup = 50 ## period after which we will begin predicting actions
-    nfeatures = 10 ## window used in out model
+    nfeatures = 7 ## window used in out model
     step = observation.step
     
     if step == 0:
@@ -81,9 +81,8 @@ def agent(observation, configuration):
         init_forest()
     else:
         if step >= ndiscard:
-            opplastaction = observation.lastOpponentAction
-            data = np.append(data,mylastaction) 
-            data = np.append(data,opplastaction)   
+            lastmove = observation.lastOpponentAction
+            data = np.append(data,[lastmove])   
             
     if step < nwarmup:
         action = warmup_strategy()
@@ -94,5 +93,5 @@ def agent(observation, configuration):
         action = predict(step)
 
     action = int((action + 1) % 3)
-    mylastaction = action
+
     return action
