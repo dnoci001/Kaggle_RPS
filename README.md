@@ -17,7 +17,7 @@ to sample a predicted move from np.choice, this provided the nessecary element o
 # Performance
 
 local testing of agent's performance againts common agents. 
-WIN: (20,100)
+WIN: (20,1000)
 TIE: [-20,20]
 LOSS: (-1000,-20)
 
