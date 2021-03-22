@@ -1,13 +1,10 @@
 # Kaggle_RPS
 Kaggle's Rock Papper Scissors Competition
 
-The goal of the competition is to create an agent that will compete against other agents playing Rock Paper Scissors.
-Each round we will have a few hundred milliseconds to predict our opponent's next move. 
-
-
-Due to time constraints we will be exploring classical ML models.
-Ideally we will have a model that is predictive of our opponent and opaque to predictions from our opponent.
+The goal of the competition is to create an agent that will compete against other agents playing Rock Paper Scissors(RPS).
 
 # Model
-A nice middle ground was found to be an implimentation of Extra Trees where the opponenets predicted move was then sampleed from np.choice
-weighted by the predicted probabilites of the Extra Trees model.
+The ideal model is both predictive of our opponent and opaque to predictions from our opponent.  
+
+Extra Trees was found to give good probabily distribution for opponents moves. The predicted probabilites where then used as weights
+to sample a predicted move from np.choice, this provided the nessecary element of opaqueness to our model. 
