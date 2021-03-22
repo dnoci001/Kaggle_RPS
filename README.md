@@ -15,3 +15,5 @@ Extra Trees was found to give good probabily distribution for opponents moves. T
 to sample a predicted move from np.choice, this provided the nessecary element of opaqueness to our model. 
 
 # Performance
+
+local testing of agent's performance againts common agents.
