@@ -3,6 +3,8 @@ Kaggle's Rock Papper Scissors Competition
 
 The goal of the competition is to create an agent that will compete against other agents playing Rock Paper Scissors(RPS).
 
+![](https://github.com/dnoci001/Kaggle_RPS/blob/main/trophy.jpg)
+
 
 # Model
 The ideal model is both predictive of our opponent and opaque to predictions from our opponent.  
