@@ -45,28 +45,29 @@ def predict_opponent_move(train_data, test_sample):
     tproba[0] = 0.0
     tproba[1] = 0.0
     tproba[2] = 0.0
-    dp = min(min_samples/step,0.9)
 
+    ntrees = 0
     for tree in forest:
-        X_train, X_drop, Y_train, Y_drop = train_test_split(train_data['x'], train_data['y'], test_size=dp, random_state=np.random.randint(1000000))
-        tree.fit(X_train, Y_train)   
-        proba = dict(zip(tree.classes_.astype(int), tree.predict_proba(test_sample)[0]))
-        for c in proba:
-            tproba[c] = tproba[c] + proba[c]
+
+        tree.fit(train_data['x'], train_data['y'])
+        stats[ntrees][0] = tree.predict_proba(test_sample)[0]
+        if stats[ntrees][1] > 0:
+            proba = dict(zip(tree.classes_.astype(int), stats[ntrees][0]))
+            stats[ntrees][0] = [0,0,0]
+            for c in proba:
+                tproba[c] = tproba[c] + stats[ntrees][1]*proba[c]
+                stats[ntrees][0][c] = proba[c]
+
+        ntrees +=1
         end = int(round(time.time() * 1000))
         if end - start > max_inc:
             break
             
+    proba = np.array([max(tproba[0],0.01),max(tproba[1],0.01),max(tproba[2],0.01)])
+    psum = np.sum(proba)
+    proba /= psum
 
-    votes = np.empty(0)
-    for a,p in tproba.items(): 
-        if int(p) > 0:
-            tvote = np.full(int(p),a)
-            votes = np.append(votes,tvote)
-        
-    votes = votes.reshape(-1)  
-    np.random.shuffle(votes)
-    action = int(votes[np.random.randint(len(votes)-1)])
+    action = choice([0,1,2],p=proba)
 
     return action
 
