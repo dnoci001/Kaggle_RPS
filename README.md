@@ -23,5 +23,5 @@ LOSS: (-1000,-10)
 
 ![](https://github.com/dnoci001/Kaggle_RPS/blob/main/images/performance_mat.png)
 
-We see that our Extra Trees Agent Wins against the same agent the Geometry bot does, but has a smaller margin of victory. This is ultimately the
+We see that our Extra Trees Agent Wins against the same agents that the Geometry bot does, but has a smaller margin of victory. This is ultimately the
 trade-off with keeping our agent as opaque as possible while still being predictive.
