@@ -3,8 +3,9 @@ import time
 import random
 import numpy as np
 import collections
+from numpy.random import choice
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.model_selection import train_test_split
+
 def init_forest():
     global forest,nest,k,min_samples,discard,primelist,dp
     k = 8
@@ -46,28 +47,20 @@ def predict_opponent_move(train_data, test_sample):
     tproba[1] = 0.0
     tproba[2] = 0.0
 
-    ntrees = 0
     for tree in forest:
-
-        tree.fit(train_data['x'], train_data['y'])
-        stats[ntrees][0] = tree.predict_proba(test_sample)[0]
-        if stats[ntrees][1] > 0:
-            proba = dict(zip(tree.classes_.astype(int), stats[ntrees][0]))
-            stats[ntrees][0] = [0,0,0]
-            for c in proba:
-                tproba[c] = tproba[c] + stats[ntrees][1]*proba[c]
-                stats[ntrees][0][c] = proba[c]
-
-        ntrees +=1
+        tree.fit(train_data['x'], train_data['y'])     
+        proba = dict(zip(tree.classes_.astype(int), tree.predict_proba(test_sample)[0]))
+        for c in proba:
+            tproba[c] = tproba[c] + proba[c]
         end = int(round(time.time() * 1000))
         if end - start > max_inc:
             break
             
-    proba = np.array([max(tproba[0],0.01),max(tproba[1],0.01),max(tproba[2],0.01)])
-    psum = np.sum(proba)
-    proba /= psum
-
-    action = choice([0,1,2],p=proba)
+    votes = np.array([tproba[0],tproba[1],tproba[2]])
+    vsum = np.sum(votes)
+    votes /= vsum
+    
+    action = choice([0,1,2],p=votes)
 
     return action
 
