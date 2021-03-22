@@ -19,7 +19,7 @@ to sample a predicted move from np.choice, this provided the nessecary element o
 local testing of agent's performance againts common agents. 
 WIN: (20,100)
 TIE: [-20,20]
-LOSS: (-1000,-10)
+LOSS: (-1000,-20)
 
 ![](https://github.com/dnoci001/Kaggle_RPS/blob/main/images/performance_mat.png)
 
